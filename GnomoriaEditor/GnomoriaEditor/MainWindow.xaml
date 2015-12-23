@@ -1,0 +1,243 @@
+﻿<Window x:Class="GnomoriaEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:w="clr-namespace:GnomoriaEditor"
+        Title="Gnomoria Editor" Height="575" Width="737">
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="Open"></CommandBinding>
+        <CommandBinding Command="Save" Executed="Save"></CommandBinding>
+        <CommandBinding Command="w:Command.ShowWorld" Executed="ShowWorld"></CommandBinding>
+        <CommandBinding Command="w:Command.ShowGnomes" Executed="ShowGnomes"></CommandBinding>
+        <CommandBinding Command="w:Command.ShowEnemies" Executed="ShowEnemies"></CommandBinding>
+        <CommandBinding Command="w:Command.SpawnGnome" Executed="SpawnGnome" CanExecute="GameAvailable"></CommandBinding>
+        <CommandBinding Command="w:Command.SetAttributes" Executed="SetAttributes" CanExecute="CanEditGnome"></CommandBinding>
+        <CommandBinding Command="w:Command.SetSkills" Executed="SetSkills" CanExecute="CanEditGnome"></CommandBinding>
+        <CommandBinding Command="w:Command.HealGnomes" Executed="HealGnomes" CanExecute="CanEditGnome"></CommandBinding>
+        <CommandBinding Command="w:Command.SetEnemyAttributes" Executed="SetEnemyAttributes" CanExecute="CanEditEnemy"></CommandBinding>
+        <CommandBinding Command="w:Command.SetEnemySkills" Executed="SetEnemySkills" CanExecute="CanEditEnemy"></CommandBinding>
+        <CommandBinding Command="w:Command.EnemyDropItems" Executed="EnemyDropItems" CanExecute="CanEditEnemy"></CommandBinding>
+    </Window.CommandBindings>
+    <Grid>
+        <ToolBarTray Height="59" VerticalAlignment="Top" Margin="0,0,10,0" IsLocked="True">
+            <ToolBar>
+                <Button x:Name="LoadButton" Command="Open">
+                    <StackPanel>
+                        <Image Source="Resources/folder.png" />
+                        <TextBlock Text="Open" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="SaveButton" Command="Save" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/disk.png" />
+                        <TextBlock Text="Save" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <ToolBar x:Name="TabTools">
+                <Button Command="w:Command.ShowWorld">
+                    <StackPanel>
+                        <Image Source="Resources/world.png" />
+                        <TextBlock Text="World" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="w:Command.ShowGnomes" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/emotion_viking.png" />
+                        <TextBlock Text="Gnomes" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="w:Command.ShowEnemies" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/emotion_brains.png" />
+                        <TextBlock Text="Enemies" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <ToolBar x:Name="GnomeTools">
+                <Button x:Name="AttributesButton" Command="w:Command.SetAttributes">
+                    <StackPanel>
+                        <Image Source="Resources/wrench_orange.png" />
+                        <TextBlock Text="Set attributes" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="SkillsButton" Command="w:Command.SetSkills" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/wrench.png" />
+                        <TextBlock Text="Set skills" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="SpawnButton" Command="w:Command.SpawnGnome" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/personals.png" />
+                        <TextBlock Text="Spawn" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="HealButton" Command="w:Command.HealGnomes" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/personals.png" />
+                        <TextBlock Text="Heal" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <ToolBar x:Name="EnemyTools">
+                <Button x:Name="EnemyAttributesButton" Command="w:Command.SetEnemyAttributes">
+                    <StackPanel>
+                        <Image Source="Resources/wrench_orange.png" />
+                        <TextBlock Text="Set attributes" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="EnemySkillsButton" Command="w:Command.SetEnemySkills" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/wrench.png" />
+                        <TextBlock Text="Set skills" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="EnemyDropItemsButton" Command="w:Command.EnemyDropItems" Margin="10,0,0,0">
+                    <StackPanel>
+                        <Image Source="Resources/box_down.png" />
+                        <TextBlock Text="Drop all items" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <TabControl x:Name="Tab" Margin="0,59,0,0">
+            <TabItem x:Name="WorldTab" Header="World">
+                <Grid Background="White">
+                    <Label x:Name="HeadingLabel" Content="Game not loaded" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="22"/>
+                    <Button x:Name="RevealMapButton" Content="Reveal map" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="75" Click="RevealMapButton_Click"/>
+                    <Button x:Name="RevealOreButton" Content="Reveal ore" HorizontalAlignment="Left" Margin="90,54,0,0" VerticalAlignment="Top" Width="75" Click="RevealOreButton_Click"/>
+                    <Button x:Name="ExpandOreButton" Content="Expand ore" HorizontalAlignment="Left" Margin="170,54,0,0" VerticalAlignment="Top" Width="75" Click="ExpandOreButton_Click"/>
+                    <GroupBox Header="Create items" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.033,-4.906" Height="198" Width="235">
+                        <Grid Margin="0,0,0,0">                            
+                            <Label Content="Material" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="MaterialList" HorizontalAlignment="Left" Margin="68,45,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="Name" SelectionChanged="MaterialList_SelectionChanged"/>
+                            <Label Content="Item" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ItemList" HorizontalAlignment="Left" Margin="68,76,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="Name"/>
+                            <Label Content="Amount" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="ItemAmount" HorizontalAlignment="Left" Height="23" Margin="68,106,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="40"/>
+                            <Button x:Name="AddItemButton" Content="Add item(s)" HorizontalAlignment="Left" Margin="113,143,0,0" VerticalAlignment="Top" Width="75" Click="AddItemButton_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <Button x:Name="IrrigateButton" Content="Irrigate underground farms" HorizontalAlignment="Left" Margin="305,54,0,0" VerticalAlignment="Top" Width="157" Click="IrrigateButton_Click"/>
+                    <GroupBox Header="Difficulty" HorizontalAlignment="Left" Margin="250,81,0,0" VerticalAlignment="Top" Height="198" Width="387">
+                        <Grid Margin="0,0,0,0">
+                            <CheckBox x:Name="BearCheckbox" Content="Bear" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="HoneyBadgerCheckbox" Content="Honey badger" HorizontalAlignment="Left" Margin="93,67,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="MonitorLizardCheckbox" Content="Monitor lizard" HorizontalAlignment="Left" Margin="208,67,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="GoblinCheckbox" Content="Goblin" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="BlueOgreCheckbox" Content="Blue ogre" HorizontalAlignment="Left" Margin="208,88,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="OgreCheckbox" Content="Ogre" HorizontalAlignment="Left" Margin="93,88,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="MantCheckbox" Content="Mant" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="BeetleCheckbox" Content="Beetle" HorizontalAlignment="Left" Margin="95,130,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="BeetleCocoonCheckbox" Content="Beetle cocoon" HorizontalAlignment="Left" Margin="208,130,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="SpiderCheckbox" Content="Spider" HorizontalAlignment="Left" Margin="11,151,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="GolemCheckbox" Content="Golem" HorizontalAlignment="Left" Margin="93,109,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="SkeletonCheckbox" Content="Skeleton" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="ZombieCheckbox" Content="Zombie" HorizontalAlignment="Left" Margin="208,109,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="IncreaseStrengthCheckBox" Content="Increase enemy strength over time" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Enemy strength" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Attack rate" HorizontalAlignment="Left" Margin="143,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Attack size" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="EnemyStrengthBox" HorizontalAlignment="Left" Height="23" Margin="108,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30"/>
+                            <TextBox x:Name="AttackRateBox" HorizontalAlignment="Left" Height="23" Margin="215,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30"/>
+                            <TextBox x:Name="AttackSizeBox" HorizontalAlignment="Left" Height="23" Margin="321,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30"/>
+                        </Grid>
+                    </GroupBox>
+                    <ProgressBar x:Name="ProgressBar" Height="10" VerticalAlignment="Top" IsIndeterminate="True"/>
+                    <TextBlock x:Name="StatusBlock" Margin="13,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="99" HorizontalAlignment="Left" Width="624"></TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="GnomesTab" Header="Gnomes" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="57">
+                <Grid Background="White">
+                    <DataGrid x:Name="GnomeGrid" Margin="10,41,10,10" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Visible" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="50" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="150" />
+                            <DataGridComboBoxColumn Header="Profession" x:Name="ProfessionColumn" SelectedValueBinding="{Binding Profession, Mode=TwoWay}"  DisplayMemberPath="Title">
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <EventSetter Event="SelectionChanged" Handler="ProfessionChanged"></EventSetter>
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
+                            <DataGridTextColumn Header="Fitness" Binding="{Binding Fitness}" />
+                            <DataGridTextColumn Header="Nimbleness" Binding="{Binding Nimbleness}" />
+                            <DataGridTextColumn Header="Curiosity" Binding="{Binding Curiosity}" />
+                            <DataGridTextColumn Header="Focus" Binding="{Binding Focus}" />
+                            <DataGridTextColumn Header="Charm" Binding="{Binding Charm}" />
+                            <DataGridTextColumn Header="Fighting" Binding="{Binding Fighting}" />
+                            <DataGridTextColumn Header="Brawling" Binding="{Binding Brawling}" />
+                            <DataGridTextColumn Header="Sword" Binding="{Binding Sword}" />
+                            <DataGridTextColumn Header="Axe" Binding="{Binding Axe}" />
+                            <DataGridTextColumn Header="Hammer" Binding="{Binding Hammer}" />
+                            <DataGridTextColumn Header="Crossbow" Binding="{Binding Crossbow}" />
+                            <DataGridTextColumn Header="Gun" Binding="{Binding Gun}" />
+                            <DataGridTextColumn Header="Shield" Binding="{Binding Shield}" />
+                            <DataGridTextColumn Header="Dodge" Binding="{Binding Dodge}" />
+                            <DataGridTextColumn Header="Armor" Binding="{Binding Armor}" />
+                            <DataGridTextColumn Header="Mining" Binding="{Binding Mining}" />
+                            <DataGridTextColumn Header="Masonry" Binding="{Binding Masonry}" />
+                            <DataGridTextColumn Header="Stonecarving" Binding="{Binding Stonecarving}" />
+                            <DataGridTextColumn Header="WoodCutting" Binding="{Binding WoodCutting}" />
+                            <DataGridTextColumn Header="Carpentry" Binding="{Binding Carpentry}" />
+                            <DataGridTextColumn Header="Woodcarving" Binding="{Binding Woodcarving}" />
+                            <DataGridTextColumn Header="Smelting" Binding="{Binding Smelting}" />
+                            <DataGridTextColumn Header="Blacksmithing" Binding="{Binding Blacksmithing}" />
+                            <DataGridTextColumn Header="Metalworking" Binding="{Binding Metalworking}" />
+                            <DataGridTextColumn Header="Weapon crafting" Binding="{Binding WeaponCrafting}" />
+                            <DataGridTextColumn Header="Armor crafting" Binding="{Binding ArmorCrafting}" />
+                            <DataGridTextColumn Header="Gemcutting" Binding="{Binding Gemcutting}" />
+                            <DataGridTextColumn Header="Jewelry Making" Binding="{Binding JewelryMaking}" />
+                            <DataGridTextColumn Header="Weaving" Binding="{Binding Weaving}" />
+                            <DataGridTextColumn Header="Tailoring" Binding="{Binding Tailoring}" />
+                            <DataGridTextColumn Header="Pottery" Binding="{Binding Pottery}" />
+                            <DataGridTextColumn Header="Leatherworking" Binding="{Binding Leatherworking}" />
+                            <DataGridTextColumn Header="Bonecarving" Binding="{Binding Bonecarving}" />
+                            <DataGridTextColumn Header="Prospecting" Binding="{Binding Prospecting}" />
+                            <DataGridTextColumn Header="Tinkering" Binding="{Binding Tinkering}" />
+                            <DataGridTextColumn Header="Machining" Binding="{Binding Machining}" />
+                            <DataGridTextColumn Header="Engineering" Binding="{Binding Engineering}" />
+                            <DataGridTextColumn Header="Mechanic" Binding="{Binding Mechanic}" />
+                            <DataGridTextColumn Header="Animal Husbandry" Binding="{Binding AnimalHusbandry}" />
+                            <DataGridTextColumn Header="Butchery" Binding="{Binding Butchery}" />
+                            <DataGridTextColumn Header="Horticulture" Binding="{Binding Horticulture}" />
+                            <DataGridTextColumn Header="Farming" Binding="{Binding Farming}" />
+                            <DataGridTextColumn Header="Cooking" Binding="{Binding Cooking}" />
+                            <DataGridTextColumn Header="Brewing" Binding="{Binding Brewing}" />
+                            <DataGridTextColumn Header="Medic" Binding="{Binding Medic}" />
+                            <DataGridTextColumn Header="Caretaking" Binding="{Binding Caretaking}" />
+                            <DataGridTextColumn Header="Construction" Binding="{Binding Construction}" />
+                            <DataGridTextColumn Header="Hauling" Binding="{Binding Hauling}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="EnemiesTab" Header="Enemies" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="57">
+                <Grid Background="White">
+                    <DataGrid x:Name="EnemyGrid" Margin="10,41,10,10" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Fitness" Binding="{Binding Fitness}" />
+                            <DataGridTextColumn Header="Nimbleness" Binding="{Binding Nimbleness}" />
+                            <DataGridTextColumn Header="Curiosity" Binding="{Binding Curiosity}" />
+                            <DataGridTextColumn Header="Focus" Binding="{Binding Focus}" />
+                            <DataGridTextColumn Header="Charm" Binding="{Binding Charm}" />
+                            <DataGridTextColumn Header="Fighting" Binding="{Binding Fighting}" />
+                            <DataGridTextColumn Header="Brawling" Binding="{Binding Brawling}" />
+                            <DataGridTextColumn Header="Sword" Binding="{Binding Sword}" />
+                            <DataGridTextColumn Header="Axe" Binding="{Binding Axe}" />
+                            <DataGridTextColumn Header="Hammer" Binding="{Binding Hammer}" />
+                            <DataGridTextColumn Header="Crossbow" Binding="{Binding Crossbow}" />
+                            <DataGridTextColumn Header="Gun" Binding="{Binding Gun}" />
+                            <DataGridTextColumn Header="Shield" Binding="{Binding Shield}" />
+                            <DataGridTextColumn Header="Dodge" Binding="{Binding Dodge}" />
+                            <DataGridTextColumn Header="Armor" Binding="{Binding Armor}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button x:Name="AboutButton" Content="About" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="40" Height="21" Click="AboutButton_Click"/>
+
+    </Grid>
+</Window>

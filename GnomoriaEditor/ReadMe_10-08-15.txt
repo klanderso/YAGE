@@ -1,0 +1,18 @@
+Original forum post: http://forums.gnomoria.com/index.php?topic=6454
+Original source code: https://bitbucket.org/tommi_hirvonen/gnome-editor/overview
+Original download: https://dl.dropboxusercontent.com/u/19756841/GnomoriaEditor.exe
+
+
+Forum post: http://forums.gnomoria.com/index.php?topic=8278.0
+Updated source code: http://klanderso.com/wordpress/wp-content/uploads/GnomoriaEditorSource.zip
+Download link: http://klanderso.com/wordpress/wp-content/uploads/GnomoriaEditor.zip
+
+
+To use, download the exe and place it in the Gnomoria installation folder, then just run it.
+
+
+IMPORTANT: This save game editor has been updated to work with Gnomoria v0.9.18 (released 10/02/15) but has not been fully tested. Use with caution, and always back up your save file(s) before trying anything, and be aware that any mods you have loaded may cause issues. This is essentially a quick and dirty fix to get the basic functions (expanding/revealing ore, adjusting gnome stats, adding items) working with the latest update.
+
+If you encounter any debilitating issues with this editor, drop me a line on the forums and I'll take a look when I get a chance.
+
+- Pasta

@@ -1,0 +1,12 @@
+﻿<Window x:Class="GnomoriaEditor.AttributeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Set attributes" Height="117" Width="265" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Label Content="Set all attributes to" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="AttributeValue" HorizontalAlignment="Left" Height="23" Margin="125,13,0,0" TextWrapping="Wrap" Text="200" VerticalAlignment="Top" Width="73"/>
+        <Button Content="Cancel" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="22" VerticalAlignment="Bottom" IsCancel="True"/>
+        <Button x:Name="OkButton" Content="OK" HorizontalAlignment="Right" Margin="0,0,90,10" Width="75" Height="22" VerticalAlignment="Bottom" Click="OkButton_Click"/>
+
+    </Grid>
+</Window>
