@@ -147,7 +147,7 @@
                     <ScrollViewer Margin="13,312,10,10">
                         <TextBlock x:Name="StatusBlock" Margin="0,0,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="auto"/>
                     </ScrollViewer>
-                    <Button x:Name="FixGhostItemsButton" Content="Fix unusable ghost items" HorizontalAlignment="Left" Margin="13,284,0,0" VerticalAlignment="Top" Width="152" ToolTip="Try to fix the problem where items stored in a deconstructed crate are bugged and unusable" Click="FixGhostItems_Click"/>
+                    <Button x:Name="FixGhostItemsButton" Content="Fix unusable ghost items" HorizontalAlignment="Left" Margin="13,284,0,0" VerticalAlignment="Top" Width="152" ToolTip="Try to fix the problem where items stored in a deconstructed crate are bugged and unusable\r\nThe crate must be deconstructed from its stockpile first. If not possible you have to remove the stockpile." Click="FixGhostItems_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="GnomesTab" Header="Gnomes" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="57">

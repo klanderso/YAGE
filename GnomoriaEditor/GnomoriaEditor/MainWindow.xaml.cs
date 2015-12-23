@@ -195,7 +195,7 @@ namespace GnomoriaEditor
             GameLoaded = true;
             LoadButton.IsEnabled = true;
             ProgressBar.Visibility = Visibility.Hidden;
-            StatusBlock.Text = "Game loaded";
+            StatusBlock.Text = "Game save loaded";
         }
 
         private void LoadDifficulty()
