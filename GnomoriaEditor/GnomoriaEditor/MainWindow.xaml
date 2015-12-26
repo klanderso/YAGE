@@ -108,7 +108,7 @@
                     <Button x:Name="RevealOreButton" Content="Reveal ore" HorizontalAlignment="Left" Margin="90,54,0,0" VerticalAlignment="Top" Width="75" Click="RevealOreButton_Click"/>
                     <Button x:Name="ExpandOreButton" Content="Expand ore" HorizontalAlignment="Left" Margin="170,54,0,0" VerticalAlignment="Top" Width="75" Click="ExpandOreButton_Click"/>
                     <GroupBox Header="Create items" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.033,-4.906" Height="198" Width="235">
-                        <Grid Margin="0,0,0,0">                            
+                        <Grid Margin="0,0,0,0">
                             <Label Content="Material" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="MaterialList" HorizontalAlignment="Left" Margin="68,45,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="Name" SelectionChanged="MaterialList_SelectionChanged"/>
                             <Label Content="Item" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
@@ -128,9 +128,9 @@
                             <CheckBox x:Name="BlueOgreCheckbox" Content="Blue ogre" HorizontalAlignment="Left" Margin="208,88,0,0" VerticalAlignment="Top"/>
                             <CheckBox x:Name="OgreCheckbox" Content="Ogre" HorizontalAlignment="Left" Margin="93,88,0,0" VerticalAlignment="Top"/>
                             <CheckBox x:Name="MantCheckbox" Content="Mant" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="BeetleCheckbox" Content="Beetle" HorizontalAlignment="Left" Margin="95,130,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="BeetleCheckbox" Content="Beetle" HorizontalAlignment="Left" Margin="93,130,0,0" VerticalAlignment="Top"/>
                             <CheckBox x:Name="BeetleCocoonCheckbox" Content="Beetle cocoon" HorizontalAlignment="Left" Margin="208,130,0,0" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="SpiderCheckbox" Content="Spider" HorizontalAlignment="Left" Margin="11,151,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="SpiderCheckbox" Content="Spider" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top"/>
                             <CheckBox x:Name="GolemCheckbox" Content="Golem" HorizontalAlignment="Left" Margin="93,109,0,0" VerticalAlignment="Top"/>
                             <CheckBox x:Name="SkeletonCheckbox" Content="Skeleton" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
                             <CheckBox x:Name="ZombieCheckbox" Content="Zombie" HorizontalAlignment="Left" Margin="208,109,0,0" VerticalAlignment="Top"/>
@@ -144,7 +144,10 @@
                         </Grid>
                     </GroupBox>
                     <ProgressBar x:Name="ProgressBar" Height="10" VerticalAlignment="Top" IsIndeterminate="True"/>
-                    <TextBlock x:Name="StatusBlock" Margin="13,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="99" HorizontalAlignment="Left" Width="624"></TextBlock>
+                    <ScrollViewer Margin="13,312,10,10">
+                        <TextBlock x:Name="StatusBlock" Margin="0,0,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="auto"/>
+                    </ScrollViewer>
+                    <Button x:Name="FixGhostItemsButton" Content="Fix unusable ghost items" HorizontalAlignment="Left" Margin="13,284,0,0" VerticalAlignment="Top" Width="152" ToolTip="Try to fix the problem where items stored in a deconstructed crate are bugged and unusable\r\nThe crate must be deconstructed from its stockpile first. If not possible you have to remove the stockpile." Click="FixGhostItems_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="GnomesTab" Header="Gnomes" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="57">

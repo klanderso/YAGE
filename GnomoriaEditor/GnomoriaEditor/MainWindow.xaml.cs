@@ -28,14 +28,14 @@ namespace GnomoriaEditor
         public List<EnemyRow> Enemies { get; set; }
 
         private ItemCreator itemCreator;
-		
+
         private bool gameloaded;
         private bool GameLoaded
         {
             set
             {
                 HeadingLabel.Content = value ? GnomanEmpire.Instance.World.AIDirector.PlayerFaction.Name : "Game not loaded";
-                
+
                 SaveButton.IsEnabled = value;
 
                 RevealMapButton.IsEnabled = value;
@@ -43,6 +43,7 @@ namespace GnomoriaEditor
                 ExpandOreButton.IsEnabled = value;
                 AddItemButton.IsEnabled = value;
                 IrrigateButton.IsEnabled = value;
+                FixGhostItemsButton.IsEnabled = value;
                 gameloaded = value;
             }
         }
@@ -55,7 +56,7 @@ namespace GnomoriaEditor
         private IEnumerable<EnemyRow> SelectedEnemyRows
         {
             get { return EnemyGrid.SelectedItems.Cast<EnemyRow>(); }
-        } 
+        }
 
         public MainWindow()
         {
@@ -131,8 +132,8 @@ namespace GnomoriaEditor
         private void LoaderLoad(object sender, DoWorkEventArgs doWorkEventArgs)
         {
             GnomanEmpire.Instance.LoadGame(File.Name);
-			if(File.Directory != null)
-				File.CopyTo(Path.Combine(File.Directory.FullName, Path.GetFileNameWithoutExtension(File.Name)) + ".backup", true);
+            if (File.Directory != null)
+                File.CopyTo(Path.Combine(File.Directory.FullName, Path.GetFileNameWithoutExtension(File.Name)) + ".backup", true);
 
             UpdateGame();
 
@@ -156,10 +157,10 @@ namespace GnomoriaEditor
                 .ForEach(Enemies.Add);
 
             var axes = GnomanEmpire.Instance.EntityManager.Entities
-                .Where(x => x.Value.TypeID() == (int) GameEntityType.Item)
+                .Where(x => x.Value.TypeID() == (int)GameEntityType.Item)
                 .Select(x => x.Value)
                 .Cast<Item>()
-				.Where(x => x.ItemID == ItemID.FellingAxe.ToString())
+                .Where(x => x.ItemID == ItemID.FellingAxe.ToString())
                 .ToList();
 
             axes.ToList();
@@ -169,11 +170,11 @@ namespace GnomoriaEditor
         private void LoadGnomes()
         {
             var chars = GnomanEmpire.Instance.EntityManager.Entities
-                .Where(x => x.Value.TypeID() == (int) GameEntityType.Character)
+                .Where(x => x.Value.TypeID() == (int)GameEntityType.Character)
                 .Select(x => x.Value)
                 .Cast<Character>();
 
-			chars.Where(x => x.RaceID == RaceID.Gnome.ToString())
+            chars.Where(x => x.RaceID == RaceID.Gnome.ToString())
                 .Select(x => new GnomeRow(x))
                 .ToList()
                 .ForEach(gnome =>
@@ -194,7 +195,7 @@ namespace GnomoriaEditor
             GameLoaded = true;
             LoadButton.IsEnabled = true;
             ProgressBar.Visibility = Visibility.Hidden;
-			StatusBlock.Text = "";
+            StatusBlock.Text = "Game save loaded";
         }
 
         private void LoadDifficulty()
@@ -205,19 +206,19 @@ namespace GnomoriaEditor
             AttackSizeBox.Text = settings.AttackSize.ToString(CultureInfo.InvariantCulture);
 
             IncreaseStrengthCheckBox.IsChecked = settings.IncreaseOverTime;
-			BearCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Bear.ToString());
-			HoneyBadgerCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.HoneyBadger.ToString());
-			MonitorLizardCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.MonitorLizard.ToString());
-			GoblinCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Goblin.ToString());
-			OgreCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Ogre.ToString());
-			BlueOgreCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.BlueOgre.ToString());
-			MantCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Mant.ToString());
-			GolemCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Golem.ToString());
-			ZombieCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Zombie.ToString());
-			SkeletonCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Skeleton.ToString());
-			BeetleCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Beetle.ToString());
-			BeetleCocoonCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.BeetleCocoon.ToString());
-			SpiderCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Spider.ToString());
+            BearCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Bear.ToString());
+            HoneyBadgerCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.HoneyBadger.ToString());
+            MonitorLizardCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.MonitorLizard.ToString());
+            GoblinCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Goblin.ToString());
+            OgreCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Ogre.ToString());
+            BlueOgreCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.BlueOgre.ToString());
+            MantCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Mant.ToString());
+            GolemCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Golem.ToString());
+            ZombieCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Zombie.ToString());
+            SkeletonCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Skeleton.ToString());
+            BeetleCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Beetle.ToString());
+            BeetleCocoonCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.BeetleCocoon.ToString());
+            SpiderCheckbox.IsChecked = settings.IsRaceAllowed(RaceID.Spider.ToString());
         }
 
         private void SaveDifficulty()
@@ -225,7 +226,7 @@ namespace GnomoriaEditor
             var settings = GnomanEmpire.Instance.World.DifficultySettings;
 
             float f;
-            if (float.TryParse(EnemyStrengthBox.Text.Replace(',','.'), NumberStyles.Any, CultureInfo.InvariantCulture, out f))
+            if (float.TryParse(EnemyStrengthBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out f))
             {
                 settings.EnemyStrength = f;
             }
@@ -239,19 +240,19 @@ namespace GnomoriaEditor
             }
 
             settings.IncreaseOverTime = IncreaseStrengthCheckBox.IsChecked == true;
-			settings.AllowRace(RaceID.Bear.ToString(), BearCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.HoneyBadger.ToString(), HoneyBadgerCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.MonitorLizard.ToString(), MonitorLizardCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Goblin.ToString(), GoblinCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Ogre.ToString(), OgreCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.BlueOgre.ToString(), BlueOgreCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Mant.ToString(), MantCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Golem.ToString(), GolemCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Zombie.ToString(), ZombieCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Skeleton.ToString(), SkeletonCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Beetle.ToString(), BeetleCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.BeetleCocoon.ToString(), BeetleCocoonCheckbox.IsChecked == true);
-			settings.AllowRace(RaceID.Spider.ToString(), SpiderCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Bear.ToString(), BearCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.HoneyBadger.ToString(), HoneyBadgerCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.MonitorLizard.ToString(), MonitorLizardCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Goblin.ToString(), GoblinCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Ogre.ToString(), OgreCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.BlueOgre.ToString(), BlueOgreCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Mant.ToString(), MantCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Golem.ToString(), GolemCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Zombie.ToString(), ZombieCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Skeleton.ToString(), SkeletonCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Beetle.ToString(), BeetleCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.BeetleCocoon.ToString(), BeetleCocoonCheckbox.IsChecked == true);
+            settings.AllowRace(RaceID.Spider.ToString(), SpiderCheckbox.IsChecked == true);
         }
 
         private void Clear()
@@ -278,14 +279,14 @@ namespace GnomoriaEditor
             EndGnomeEdit();
             Gnomes.ToList().ForEach(x => x.Save());
             Enemies.ForEach(x => x.Save());
-			//GnomanEmpire.Instance.Camera.Update(1.0f);
+            //GnomanEmpire.Instance.Camera.Update(1.0f);
 
             ProgressBar.Visibility = Visibility.Visible;
             var worker = new BackgroundWorker();
             worker.DoWork += SaverSave;
             worker.RunWorkerCompleted += SaverComplete;
             worker.RunWorkerAsync();
-			/*if(worker.IsBusy == false)
+            /*if(worker.IsBusy == false)
 			{
 				SaveDifficulty();
 
@@ -309,10 +310,10 @@ namespace GnomoriaEditor
         private void SaverComplete(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
             ProgressBar.Visibility = Visibility.Hidden;
-			AddStatusText("Save Complete.");
+            AddStatusText("Save Complete.");
         }
 
-		/*private void SaverComplete1(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        /*private void SaverComplete1(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
 		{
 			ProgressBar.Visibility = Visibility.Hidden;
 			AddStatusText("Saver #2 done.");
@@ -343,7 +344,7 @@ namespace GnomoriaEditor
         {
             EndGnomeEdit();
 
-            var dlg = new AttributeDialog {Owner = this};
+            var dlg = new AttributeDialog { Owner = this };
             var result = dlg.ShowDialog();
             if (result == false)
             {
@@ -360,9 +361,9 @@ namespace GnomoriaEditor
         {
             EndGnomeEdit();
 
-            var dlg = new SkillDialog {Owner = this};
+            var dlg = new SkillDialog { Owner = this };
             var result = dlg.ShowDialog();
-            if(result == false)
+            if (result == false)
             {
                 return;
             }
@@ -405,15 +406,15 @@ namespace GnomoriaEditor
                     continue;
                 }
 
-				/*if(Int32.Parse(mineral.MaterialID) >= (int)Material.Coal && Int32.Parse(mineral.MaterialID) <= (int)Material.BlueGem)*/
-				/*if(Int32.Parse(mineral.MaterialID) >= (int)Material.Coal && Int32.Parse(mineral.MaterialID) <= (int)Material.BlueGem)*/
-				else
+                /*if(Int32.Parse(mineral.MaterialID) >= (int)Material.Coal && Int32.Parse(mineral.MaterialID) <= (int)Material.BlueGem)*/
+                /*if(Int32.Parse(mineral.MaterialID) >= (int)Material.Coal && Int32.Parse(mineral.MaterialID) <= (int)Material.BlueGem)*/
+                else
                 {
                     mapCell.IsVisible = true;
                 }
             }
-			//map.MoveCamera(new Vector3());
-			//GnomanEmpire.Instance.Camera.Update(1.0f);
+            //map.MoveCamera(new Vector3());
+            //GnomanEmpire.Instance.Camera.Update(1.0f);
             AddStatusText("Revealed ore");
         }
 
@@ -424,38 +425,38 @@ namespace GnomoriaEditor
 
             var mineralsToAdd = new List<Mineral>();
 
-			for(var depth = 0; depth < map.MapDepth; depth++)
-			{
-				for(var height = 0; height < map.MapHeight; height++)
-				{
-					for(var width = 0; width < map.MapWidth; width++)
-					{
-						var mineral = map.Levels[depth][height][width].EmbeddedWall as Mineral;
-						if(mineral == null)
-						{
-							continue;
-						}
+            for (var depth = 0; depth < map.MapDepth; depth++)
+            {
+                for (var height = 0; height < map.MapHeight; height++)
+                {
+                    for (var width = 0; width < map.MapWidth; width++)
+                    {
+                        var mineral = map.Levels[depth][height][width].EmbeddedWall as Mineral;
+                        if (mineral == null)
+                        {
+                            continue;
+                        }
 
-						if(height != 0 && !map.Levels[depth][height - 1][width].HasEmbeddedWall() && map.Levels[depth][height - 1][width].HasNaturalWall() && map.Levels[depth][height - 1][width].Wall >= 4)
-						{
-							mineralsToAdd.Add(new Mineral(new Vector3(width, height - 1, depth), mineral.MaterialID));
-						}
-						if(width != 0 && !map.Levels[depth][height][width - 1].HasEmbeddedWall() && map.Levels[depth][height][width - 1].HasNaturalWall() && map.Levels[depth][height][width - 1].Wall >= 4)
-						{
-							mineralsToAdd.Add(new Mineral(new Vector3(width - 1, height, depth), mineral.MaterialID));
-						}
-						if(height + 1 != map.MapHeight && !map.Levels[depth][height + 1][width].HasEmbeddedWall() && map.Levels[depth][height + 1][width].HasNaturalWall() && map.Levels[depth][height + 1][width].Wall >= 4)
-						{
-							mineralsToAdd.Add(new Mineral(new Vector3(width, height + 1, depth), mineral.MaterialID));
-						}
-						if(width + 1 != map.MapWidth && !map.Levels[depth][height][width + 1].HasEmbeddedWall() && map.Levels[depth][height][width + 1].HasNaturalWall() && map.Levels[depth][height][width + 1].Wall >= 4)
-						{
-							mineralsToAdd.Add(new Mineral(new Vector3(width + 1, height, depth), mineral.MaterialID));
-						}
-					}
-				}
-			}
-			//GnomanEmpire.Instance.Camera.Update(1.0f);
+                        if (height != 0 && !map.Levels[depth][height - 1][width].HasEmbeddedWall() && map.Levels[depth][height - 1][width].HasNaturalWall() && map.Levels[depth][height - 1][width].Wall >= 4)
+                        {
+                            mineralsToAdd.Add(new Mineral(new Vector3(width, height - 1, depth), mineral.MaterialID));
+                        }
+                        if (width != 0 && !map.Levels[depth][height][width - 1].HasEmbeddedWall() && map.Levels[depth][height][width - 1].HasNaturalWall() && map.Levels[depth][height][width - 1].Wall >= 4)
+                        {
+                            mineralsToAdd.Add(new Mineral(new Vector3(width - 1, height, depth), mineral.MaterialID));
+                        }
+                        if (height + 1 != map.MapHeight && !map.Levels[depth][height + 1][width].HasEmbeddedWall() && map.Levels[depth][height + 1][width].HasNaturalWall() && map.Levels[depth][height + 1][width].Wall >= 4)
+                        {
+                            mineralsToAdd.Add(new Mineral(new Vector3(width, height + 1, depth), mineral.MaterialID));
+                        }
+                        if (width + 1 != map.MapWidth && !map.Levels[depth][height][width + 1].HasEmbeddedWall() && map.Levels[depth][height][width + 1].HasNaturalWall() && map.Levels[depth][height][width + 1].Wall >= 4)
+                        {
+                            mineralsToAdd.Add(new Mineral(new Vector3(width + 1, height, depth), mineral.MaterialID));
+                        }
+                    }
+                }
+            }
+            //GnomanEmpire.Instance.Camera.Update(1.0f);
             mineralsToAdd.ForEach(em.SpawnEntityImmediate);
             AddStatusText("Expanded ore");
         }
@@ -472,14 +473,14 @@ namespace GnomoriaEditor
             var position = FindPosition();
             if (position == Vector3.Zero || selectedItem == null || selectedMaterial == null)
                 return;
-            
+
             //var qualityRow = QualityList.SelectedItem as QualityRow;
 
             var itemName = itemCreator.CreateItem(selectedItem, selectedMaterial, amount, position);
             AddStatusText("Added " + amount + "x " + itemName);
         }
 
-		
+
         private void AddStatusText(string text)
         {
             StatusBlock.Text = text + "\r\n" + StatusBlock.Text;
@@ -512,13 +513,13 @@ namespace GnomoriaEditor
                .ForEach(character =>
                {
                    character.HealDestroyedBodySection();
-				   character.HealWound(new Item(new Vector3(0, 0, 0), ItemID.Bandage.ToString(), Material.Wool.ToString()));
+                   character.HealWound(new Item(new Vector3(0, 0, 0), ItemID.Bandage.ToString(), Material.Wool.ToString()));
                });
         }
 
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new AboutDialog {Owner = this};
+            var dlg = new AboutDialog { Owner = this };
             dlg.ShowDialog();
         }
 
@@ -534,7 +535,7 @@ namespace GnomoriaEditor
 
         private void SetEnemyAttributes(object sender, ExecutedRoutedEventArgs e)
         {
-            var dlg = new AttributeDialog {Owner = this};
+            var dlg = new AttributeDialog { Owner = this };
             var result = dlg.ShowDialog();
             if (result == false)
             {
@@ -550,7 +551,7 @@ namespace GnomoriaEditor
 
         private void SetEnemySkills(object sender, ExecutedRoutedEventArgs e)
         {
-            var dlg = new SkillDialog {Owner = this, ProfessionSkills = {IsChecked = false, IsEnabled = false}};
+            var dlg = new SkillDialog { Owner = this, ProfessionSkills = { IsChecked = false, IsEnabled = false } };
             var result = dlg.ShowDialog();
             if (result == false)
             {
@@ -573,7 +574,7 @@ namespace GnomoriaEditor
             var enemyIds = SelectedEnemyRows.Select(x => x.Id).ToList();
 
             GnomanEmpire.Instance.EntityManager.Entities
-                .Where(x => x.Value.TypeID() == (int) GameEntityType.Character && enemyIds.Contains(x.Value.ID))
+                .Where(x => x.Value.TypeID() == (int)GameEntityType.Character && enemyIds.Contains(x.Value.ID))
                 .Select(x => x.Value)
                 .Cast<Character>()
                 .Where(x => EnemyFactions.Any(y => y.ID == x.FactionID))
@@ -592,7 +593,7 @@ namespace GnomoriaEditor
 
             foreach (var underGroundFarm in underGroundFarms)
             {
-                var level = (int) underGroundFarm.RandomPosition().Z;
+                var level = (int)underGroundFarm.RandomPosition().Z;
 
                 foreach (var area in underGroundFarm.Areas)
                 {
@@ -605,7 +606,7 @@ namespace GnomoriaEditor
                             if (mapCell.Liquid == null)
                             {
                                 var position = new Vector3(posX, posY, level);
-								var water = new Liquid(position, Material.Water.ToString(), 1.0f, new Vector3(0, 0, 0), false);
+                                var water = new Liquid(position, Material.Water.ToString(), 1.0f, new Vector3(0, 0, 0), false);
                                 mapCell.AddLiquid(water);
                             }
                         }
@@ -640,24 +641,66 @@ namespace GnomoriaEditor
 
         private void ProfessionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(e.AddedItems.Count > 0 && GnomeGrid.SelectedItem != null)
-                ((GnomeRow) GnomeGrid.SelectedItem).Profession = e.AddedItems[0] as Profession;
+            if (e.AddedItems.Count > 0 && GnomeGrid.SelectedItem != null)
+                ((GnomeRow)GnomeGrid.SelectedItem).Profession = e.AddedItems[0] as Profession;
+        }
+
+        /// <summary>
+        /// Chatmetaleux's method to fix the ghost items (experimental)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>This only fix a bug in saved games, not the cause !</remarks>
+        private void FixGhostItems_Click(object sender, RoutedEventArgs e)
+        {
+            int cnt = 0;
+            var resultsQ = GnomanEmpire.Instance.Fortress.StockManager.ItemsByItemID(GameLibrary.ItemID.Crate.ToString());
+            if (resultsQ != null)
+            {
+                //var results = resultsQ.AllItems().Items;
+                foreach (var valuePair in resultsQ)
+                {
+                    List<Game.Item> list = valuePair.Value;
+                    foreach (Game.Item item in list)
+                    {
+                        if (item.Claimed && item.ClaimedBy == null)
+                        {
+                            AddStatusText(string.Format("container claimed @{0} : {1}" , item.Position.ToString(),item.Name()));
+                            StorageContainer sc = (StorageContainer)item;
+                            foreach (Item it in sc.ContainedResources)
+                            {
+                                it.FixClaimedItems();
+                                AddStatusText(string.Format("fix container->{0} ", it.Name()));
+                            }
+                            AddStatusText("container still claimed ? " + item.Claimed.ToString());
+                            cnt++;
+                        }
+                    }
+
+                }
+            }
+            AddStatusText(string.Format("Done. {0} container fixed.", cnt));
         }
     }
 
-    public static class Command
-    {
-        public static readonly RoutedUICommand ShowWorld = new RoutedUICommand("World", "ShowWorld", typeof(MainWindow));
-        public static readonly RoutedUICommand ShowGnomes = new RoutedUICommand("Gnomes", "ShowGnomes", typeof(MainWindow));
-        public static readonly RoutedUICommand ShowEnemies = new RoutedUICommand("Enemies", "ShowEnemies", typeof(MainWindow));
 
-        public static readonly RoutedUICommand SetAttributes = new RoutedUICommand("Set attributes", "SetAttributes", typeof(MainWindow));
-        public static readonly RoutedUICommand SetSkills = new RoutedUICommand("Set skills", "SetSkills", typeof(MainWindow));
-        public static readonly RoutedUICommand SpawnGnome = new RoutedUICommand("Spawn gnome", "SpawnGnome", typeof(MainWindow));
-        public static readonly RoutedUICommand HealGnomes = new RoutedUICommand("Heal gnomes", "HealGnomes", typeof(MainWindow));
+        public static class Command
+        {
+            public static readonly RoutedUICommand ShowWorld = new RoutedUICommand("World", "ShowWorld", typeof(MainWindow));
+            public static readonly RoutedUICommand ShowGnomes = new RoutedUICommand("Gnomes", "ShowGnomes", typeof(MainWindow));
+            public static readonly RoutedUICommand ShowEnemies = new RoutedUICommand("Enemies", "ShowEnemies", typeof(MainWindow));
 
-        public static readonly RoutedUICommand SetEnemyAttributes = new RoutedUICommand("Set enemy attributes", "SetEnemyAttributes", typeof(MainWindow));
-        public static readonly RoutedUICommand SetEnemySkills = new RoutedUICommand("Set enemy skills", "SetEnemySkills", typeof(MainWindow));
-        public static readonly RoutedUICommand EnemyDropItems = new RoutedUICommand("Drop items", "EnemyDropItems", typeof(MainWindow));
-    }
+            public static readonly RoutedUICommand SetAttributes = new RoutedUICommand("Set attributes", "SetAttributes", typeof(MainWindow));
+            public static readonly RoutedUICommand SetSkills = new RoutedUICommand("Set skills", "SetSkills", typeof(MainWindow));
+            public static readonly RoutedUICommand SpawnGnome = new RoutedUICommand("Spawn gnome", "SpawnGnome", typeof(MainWindow));
+            public static readonly RoutedUICommand HealGnomes = new RoutedUICommand("Heal gnomes", "HealGnomes", typeof(MainWindow));
+
+            public static readonly RoutedUICommand SetEnemyAttributes = new RoutedUICommand("Set enemy attributes", "SetEnemyAttributes", typeof(MainWindow));
+            public static readonly RoutedUICommand SetEnemySkills = new RoutedUICommand("Set enemy skills", "SetEnemySkills", typeof(MainWindow));
+            public static readonly RoutedUICommand EnemyDropItems = new RoutedUICommand("Drop items", "EnemyDropItems", typeof(MainWindow));
+        }
+
+
+    
 }
+
