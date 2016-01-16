@@ -711,18 +711,17 @@ namespace GnomoriaEditor
                                 }
                                 cnt++;
                             }
-                            if (GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall is ConstructedContainer) // container on stockpile
+                        }
+                        if (GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall is ConstructedContainer) // container on stockpile
+                        {
+                            ConstructedContainer cc = (ConstructedContainer)GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall;
+                            AddStatusText(string.Format("container stockpile @z{0} y{1} x{2} ", z, height, width));
+                            foreach (Item it in cc.Container.ContainedResources)
                             {
-                                ConstructedContainer cc = (ConstructedContainer)GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall;
-                                AddStatusText(string.Format("container stockpile @z{0} y{1} x{2} ", z, height, width));
-                                foreach (Item it in cc.Container.ContainedResources)
-                                {
-                                    it.FixClaimedItems();
-                                }
-                                cc.Container.FixClaimedItems();
-                                cnt++;
+                                it.FixClaimedItems();
                             }
-
+                            cc.Container.FixClaimedItems();
+                            cnt++;
                         }
                     }
                 }
