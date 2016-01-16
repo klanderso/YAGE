@@ -694,21 +694,40 @@ namespace GnomoriaEditor
                             if (ge is Game.ResourcePile)
                             {
                                 ResourcePile rp = (ResourcePile)ge;
-                                if (rp.Claimed)
+                                AddStatusText(string.Format("pile @{0} : {1}", rp.Position.ToString(), rp.Name()));
+                                foreach (Item it in rp.ContainedResources)
                                 {
-                                    AddStatusText(string.Format("pile claimed @{0} : {1}", rp.Position.ToString(), rp.Name()));
-                                    foreach (Item it in rp.ContainedResources)
-                                    {
-                                        it.FixClaimedItems();
-                                    }
-                                    cnt++;
+                                    it.FixClaimedItems();
                                 }
+                                cnt++;
                             }
+                            else if (ge is Game.StorageContainer)
+                            {
+                                StorageContainer sc = (StorageContainer)ge;
+                                AddStatusText(string.Format("container @{0} : {1}", sc.Position.ToString(), sc.Name()));
+                                foreach (Item it in sc.ContainedResources)
+                                {
+                                    it.FixClaimedItems();
+                                }
+                                cnt++;
+                            }
+                            if (GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall is ConstructedContainer) // container on stockpile
+                            {
+                                ConstructedContainer cc = (ConstructedContainer)GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall;
+                                AddStatusText(string.Format("container stockpile @z{0} y{1} x{2} ", z, height, width));
+                                foreach (Item it in cc.Container.ContainedResources)
+                                {
+                                    it.FixClaimedItems();
+                                }
+                                cc.Container.FixClaimedItems();
+                                cnt++;
+                            }
+
                         }
                     }
                 }
             }
-            AddStatusText(string.Format("Done. {0} piles fixed.", cnt));
+            AddStatusText(string.Format("Done. {0} piles/container fixed.", cnt));
         }
     }
 
