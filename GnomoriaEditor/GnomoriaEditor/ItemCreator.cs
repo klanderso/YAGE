@@ -193,8 +193,14 @@ namespace GnomoriaEditor
         private Item CreateSimpleItem(ItemID itemId, Material material, Vector3 position)
         {
             var componentSource = GetComponentSource(material, position);
+            Item newItem;
 
-			var newItem = new Item(position, itemId.ToString(), material.ToString());
+            if (material==Material.BlueGem || material == Material.GreenGem) /* special case - fix 23/03/2016 chatmetaleux */
+            {
+                newItem = new Item(position, itemId.ToString(), (material == Material.BlueGem) ? "Sapphire":"Emerald");
+            }
+            else
+                newItem = new Item(position, itemId.ToString(), material.ToString());
 
             if (componentSource != null)
             {
