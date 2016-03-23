@@ -100,7 +100,6 @@ namespace GnomoriaEditor
 
         private void Open(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
         {
-            LoadButton.IsEnabled = false;
             EndGnomeEdit();
 
             var dlg = new OpenFileDialog
@@ -116,6 +115,7 @@ namespace GnomoriaEditor
                 return;
             }
 
+            LoadButton.IsEnabled = false;
             Clear();
 
             ProgressBar.Visibility = Visibility.Visible;
@@ -654,18 +654,18 @@ namespace GnomoriaEditor
         private void FixGhostItems_Click(object sender, RoutedEventArgs e)
         {
             int cnt = 0;
-            var resultsQ = GnomanEmpire.Instance.Fortress.StockManager.ItemsByItemID(GameLibrary.ItemID.Crate.ToString());
-            if (resultsQ != null)
+            // search for crates
+            var results = GnomanEmpire.Instance.Fortress.StockManager.ItemsByItemID(GameLibrary.ItemID.Crate.ToString());
+            if (results != null)
             {
-                //var results = resultsQ.AllItems().Items;
-                foreach (var valuePair in resultsQ)
+                foreach (var valuePair in results)
                 {
                     List<Game.Item> list = valuePair.Value;
                     foreach (Game.Item item in list)
                     {
                         if (item.Claimed && item.ClaimedBy == null)
                         {
-                            AddStatusText(string.Format("container claimed @{0} : {1}" , item.Position.ToString(),item.Name()));
+                            AddStatusText(string.Format("container claimed @{0} : {1}", item.Position.ToString(), item.Name()));
                             StorageContainer sc = (StorageContainer)item;
                             foreach (Item it in sc.ContainedResources)
                             {
@@ -679,7 +679,54 @@ namespace GnomoriaEditor
 
                 }
             }
-            AddStatusText(string.Format("Done. {0} container fixed.", cnt));
+            AddStatusText(string.Format("Done. {0} containers fixed.", cnt));
+            cnt = 0;
+
+            // search for piles
+            for (int z = 0; z < GnomanEmpire.Instance.Map.MapHeight; z++)
+            {
+                for (int height = 0; height < GnomanEmpire.Instance.Map.MapHeight; ++height)
+                {
+                    for (int width = 0; width < GnomanEmpire.Instance.Map.MapWidth; ++width)
+                    {
+                        foreach (GameEntity ge in GnomanEmpire.Instance.Map.Levels[z][height][width].Objects)
+                        {
+                            if (ge is Game.ResourcePile)
+                            {
+                                ResourcePile rp = (ResourcePile)ge;
+                                AddStatusText(string.Format("pile @{0} : {1}", rp.Position.ToString(), rp.Name()));
+                                foreach (Item it in rp.ContainedResources)
+                                {
+                                    it.FixClaimedItems();
+                                }
+                                cnt++;
+                            }
+                            else if (ge is Game.StorageContainer)
+                            {
+                                StorageContainer sc = (StorageContainer)ge;
+                                AddStatusText(string.Format("container @{0} : {1}", sc.Position.ToString(), sc.Name()));
+                                foreach (Item it in sc.ContainedResources)
+                                {
+                                    it.FixClaimedItems();
+                                }
+                                cnt++;
+                            }
+                        }
+                        if (GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall is ConstructedContainer) // container on stockpile
+                        {
+                            ConstructedContainer cc = (ConstructedContainer)GnomanEmpire.Instance.Map.Levels[z][height][width].EmbeddedWall;
+                            AddStatusText(string.Format("container stockpile @z{0} y{1} x{2} ", z, height, width));
+                            foreach (Item it in cc.Container.ContainedResources)
+                            {
+                                it.FixClaimedItems();
+                            }
+                            cc.Container.FixClaimedItems();
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            AddStatusText(string.Format("Done. {0} piles/container fixed.", cnt));
         }
     }
 
