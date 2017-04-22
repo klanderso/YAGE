@@ -44,6 +44,7 @@ namespace GnomoriaEditor
                 AddItemButton.IsEnabled = value;
                 IrrigateButton.IsEnabled = value;
                 FixGhostItemsButton.IsEnabled = value;
+                ReattachLostLimbs.IsEnabled = value;
                 gameloaded = value;
             }
         }
@@ -728,10 +729,56 @@ namespace GnomoriaEditor
             }
             AddStatusText(string.Format("Done. {0} piles/container fixed.", cnt));
         }
+
+        /// <summary>
+        /// Reattach lost limbs to all gnomes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ReattachLostLimbs_Click(object sender, RoutedEventArgs e)
+        {
+            var chars = GnomanEmpire.Instance.EntityManager.Entities
+                .Where(x => x.Value.TypeID() == (int)GameEntityType.Character)
+                .Select(x => x.Value)
+                .Cast<Character>();
+
+            chars.Where(x => x.RaceID == RaceID.Gnome.ToString())                
+                .ToList()
+                .ForEach(gnome =>
+                {
+                    if (String.IsNullOrWhiteSpace(gnome.Body.AilmentText()))
+                        return;
+
+                    while (true) {
+                        var missing = gnome.Body.NeedsArtificialLimb();
+                        if (missing == null)
+                            break;
+                        ItemID artificialLimbId;
+                        switch ((BodyPartType)Enum.Parse(typeof (BodyPartType), missing.BodyPartID)) {
+                            case BodyPartType.GnomeArm:
+                                artificialLimbId = ItemID.ArtificialArm;
+                                break;
+                            case BodyPartType.GnomeHand:
+                                artificialLimbId = ItemID.ArtificialHand;
+                                break;
+                            case BodyPartType.GnomeLeg:
+                                artificialLimbId = ItemID.ArtificialLeg;
+                                break;
+                            case BodyPartType.GnomeFoot:
+                                artificialLimbId = ItemID.ArtificialFoot;
+                                break;
+                            default:
+                                Console.WriteLine("Don't know what to do for a missing " + missing.Name);
+                                return;
+                        }
+                        gnome.Body.InstallArtificialLimb(itemCreator.CreateSimpleItem(artificialLimbId, Material.Steel, gnome.Position));
+                    }
+                });
+        }
     }
 
 
-        public static class Command
+    public static class Command
         {
             public static readonly RoutedUICommand ShowWorld = new RoutedUICommand("World", "ShowWorld", typeof(MainWindow));
             public static readonly RoutedUICommand ShowGnomes = new RoutedUICommand("Gnomes", "ShowGnomes", typeof(MainWindow));
