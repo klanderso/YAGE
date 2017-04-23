@@ -771,7 +771,10 @@ namespace GnomoriaEditor
                                 Console.WriteLine("Don't know what to do for a missing " + missing.Name);
                                 return;
                         }
-                        gnome.Body.InstallArtificialLimb(itemCreator.CreateSimpleItem(artificialLimbId, Material.Steel, gnome.Position));
+                        var artificialLimbItem = itemCreator.CreateSimpleItem(artificialLimbId, Material.Steel, gnome.Position);
+                        GnomanEmpire.Instance.Fortress.AddItem(artificialLimbItem);
+                        gnome.Body.InstallArtificialLimb(artificialLimbItem);
+                        AddStatusText($"Installed {artificialLimbItem.Name()} on {gnome.NameAndTitle()}");
                     }
                 });
         }
