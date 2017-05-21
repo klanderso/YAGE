@@ -148,6 +148,7 @@
                         <TextBlock x:Name="StatusBlock" Margin="0,0,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="auto"/>
                     </ScrollViewer>
                     <Button x:Name="FixGhostItemsButton" Content="Fix unusable ghost items" HorizontalAlignment="Left" Margin="13,284,0,0" VerticalAlignment="Top" Width="152" ToolTip="Try to fix the problem where items stored in a deconstructed crate are bugged and unusable\r\nThe crate must be deconstructed from its stockpile first. If not possible you have to remove the stockpile." Click="FixGhostItems_Click"/>
+                    <Button x:Name="ReattachLostLimbs" Content="Reattach Lost Limbs" HorizontalAlignment="Left" Margin="198,284,0,0" VerticalAlignment="Top" Width="152" ToolTip="Reattach lost limbs to all gnomes" Click="ReattachLostLimbs_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="GnomesTab" Header="Gnomes" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="57">

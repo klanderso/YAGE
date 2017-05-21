@@ -190,7 +190,7 @@ namespace GnomoriaEditor
             return name;
         }
 
-        private Item CreateSimpleItem(ItemID itemId, Material material, Vector3 position)
+        public Item CreateSimpleItem(ItemID itemId, Material material, Vector3 position)
         {
             var componentSource = GetComponentSource(material, position);
             Item newItem;
